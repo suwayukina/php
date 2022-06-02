@@ -1,0 +1,22 @@
+table {
+    border-collapse: collapse; 
+    color: #333; 
+    width: 40em;  
+}
+td, th {
+    border: 1px solid #ffffff;
+    text-align: center; 
+    background-color: #adddf8;
+    padding: 3px;
+}
+th {
+    background-color: #057fc5;
+    color: rgb(255, 255, 255); 
+}
+
+.addsingle td{
+    border: 1px solid #ffffff;
+    text-align: center; 
+    background-color: #f39ae3;
+    padding: 3px;
+}

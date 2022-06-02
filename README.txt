@@ -1,84 +1,39 @@
-[環境構築]
-○ドッカー起動
-docker-compose up -d
 
-○laravelインストール
-docker compose exec app_laravel_project composer create-project --prefer-dist laravel/laravel project
+http://localhost:7008/top　で操作ページにアクセス
 
-○権限オール7
-docker compose exec -w /var/www/html app_laravel_project chmod -R 777 project
+○全データ取得する
+１，axreq:Allの送信ボタンを押下。
 
-○.env書き換え
-html\project\.envのDBの値を変更する
-DB_CONNECTION=mysql
-DB_HOST=db-host
-DB_PORT=14406
-DB_DATABASE=laravel_db
-DB_USERNAME=root
-DB_PASSWORD=root
+結果　OfficeMasterテーブルの全レコードが表示される。
 
-○DB接続確認(マイグレ実行)
-docker compose exec -w /var/www/html/project app_laravel_project php artisan migrate
-→エラーが出る場合は以下を打ってみる
-docker compose exec -w /var/www/html/project app_laravel_project php artisan migrate:fresh
 
-[DB作成]
-○テーブルの定義を行う
-docker compose exec -w /var/www/html/project php artisan make:model -m XXX
-→project/app/Models/XXX.php　が出来る
-→project/database/migrations/yyyy_mm_dd_XXXXXX_create_XXX_table.php　が出来る
+○対象のレコードを取得する
+１，フィールドにIDを入力。
+２，axreq:Singleの送信ボタンを押下。
 
-project/database/migrations/yyyy_mm_dd_XXXXXX_create_XXX_table.php　にカラムを記載する
+結果　OfficeMasterテーブルの指定レコードが表示される。
 
-○テーブル作成実行
-docker compose exec -w /var/www/html/project php artisan migrate
 
-○ダミーデータを作成する
-docker compose exec -w /var/www/html/project php artisan make:seeder XXXs
-→project/database/seeders/XXXs.php　が出来る
-　ここのrun()にダミーデータを記載する(便利機能：モデルファクトリ)
-　use App\Models\XXX;　の記述が必要
+○対象のレコードの値を更新する
+１，フィールドにID＋更新するフィールドに値を入力。
+（空欄の場合そのフィールドの変更なし）
+（指定したIDがテーブルに無いと更新しない）
+２, axreq:Updateの送信ボタンを押下。
 
-project/database/seeders/DatabaseSeeder.phpn以下を追記する。
-        $this->call([
-            XXX::class,
-        ]);
+結果　OfficeMasterテーブルの更新されたレコードが表示される。
 
-○ダミーデータ作成実行
-docker compose exec -w /var/www/html/project php artisan db:seed
-docker compose exec -w /var/www/html/project php artisan db:seed --class=XXXSeeder
-→phpmyadmin見るとデータが増えている
 
-[コントローラ作成]
-○初期関数あり
-docker compose exec -w /var/www/html/project php artisan make:controller XXXController
+○レコードを追加する
+１，全フィールドに値を入力。
+（IDは自動で割り振られる）
+２, axreq:AddSingleの送信ボタンを押下。
 
-○DBと紐づけ
-docker compose exec -w /var/www/html/project php artisan make:controller XXXController --model=XXX --resource
+結果　OfficeMasterテーブル全レコード＋追加されたレコード（ピンク色のレコード）が表示される。
 
-○web.php修正
-use App\Http\Controllers\XXXController;
-Route::resource('XXX', XXXController::class);
+テーブルの確認↓
+http://localhost:4501/index.php?route=/sql&pos=0&db=laravel_db&table=office_masters
 
-○web.config修正うまくいっているか確認(ルート確認)
-docker compose exec -w /var/www/html/project php artisan route:list
 
-[ubuntu設定]　※文字コードをutf-8にする
-# 1．パッケージ情報の更新
-sudo apt update
-sudo apt upgrade
-
-# 2．日本語言語パックのインストール
-sudo apt -y install language-pack-ja
-
-# 3．ロケールを日本語に設定
-sudo update-locale LANG=ja_JP.UTF8
-
-# 4．ここでいったん終了してから、Ubuntuを再起動
-
-# 5．タイムゾーンをJSTに設定
-sudo dpkg-reconfigure tzdata
-
-# 6．日本語マニュアルのインストール
-sudo apt -y install manpages-ja manpages-ja-dev
-
+テーブルの外部キー設定確認↓
+http://localhost:4501/index.php?route=/sql&pos=0&db=laravel_db&table=people
+一番左の「usercd」カラムの値を押下すると親テーブル（office_mastersテーブル）の対応するレコードに飛ぶ

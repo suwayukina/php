@@ -27,8 +27,6 @@ class PersonFactory extends Factory
             'phone' => $this->faker->phoneNumber,
             'usercd' => $this->faker->randomNumber(2),
             'usercd'=> $user_id,
-
-
         ];
     }
 }
