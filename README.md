@@ -8,7 +8,7 @@ docker-compose up -d
 
 ○アクセス
 
-http://localhost:5321/\n\n
+http://localhost:5321/
 
 
 ○開発
